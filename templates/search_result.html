@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>Search Our Library</h2>
+    <form action="{{url_for('search_result')}}" method="get">
+        <label for="title">
+            <span>Title:</span>
+            <input type="text" id="game_title" name="game_title"/>
+            <button type="submit">Search</button>
+        </label>
+    </form>
+    <h1>{{game_title}}</h1>
+</body>
+</html>
