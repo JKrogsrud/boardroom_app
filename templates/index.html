@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to the Boardroom</title>
-</head>
-<body>
-    <h2><a href="/search">Search Boardgames</a></h2>
-</body>
-</html>
+{% extends "all_page.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h1>Index</h1>
+    <p class="important">
+        Some important info
+    </p>
+{% endblock %}

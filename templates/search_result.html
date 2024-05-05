@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "all_page.html" %}
+{% block title %}Search results{% endblock title %}
+{% block head %}
+    {{ super() }}
+    <script src="{{url_for('static', filename='js/searchResults.js') }}" defer></script>
+{% endblock head%}
+{% block content %}
     <h2>Search Our Library</h2>
-    <form action="{{url_for('search_result')}}" method="get">
+    <form action="{{url_for('search_result')}}" method="post">
         <label for="title">
             <span>Title:</span>
             <input type="text" id="game_title" name="game_title"/>
             <button type="submit">Search</button>
         </label>
     </form>
-    <h1>{{game_title}}</h1>
-</body>
-</html>
+    {% if data%}
+        {% for item in data %}
+            <div class="result" id="{{item}}">
+                <p> {{data[item]}} </p>
+                <button class="remove">Remove</button>
+                <button class="view">View</button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock content %}

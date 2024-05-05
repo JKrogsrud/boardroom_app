@@ -1,0 +1,38 @@
+.header {
+    padding: 80px; /* padding*/
+    text-align: center;
+    background: #ffffff;
+    color: black;
+}
+
+.header h1 {
+    font-size: 40px;
+}
+
+/* Add Black background to top navigation*/
+.navigation {
+    background-color: #333;
+    overflow: hidden;
+}
+
+/* Style the links inside nav bar*/
+.navigation a {
+    float: left; /* where the element should float - like alignment*/
+    color: #f2f2f2;
+    text-align: center;
+    padding: 20px;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+/* Cab change color of hovers*/
+.navigation a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Cab change color of active*/
+.navigation a:active {
+    background-color: #04AA6D;
+    color: white;
+}
