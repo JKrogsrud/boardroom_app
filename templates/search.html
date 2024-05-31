@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "all_page.html" %}
+{% block title %}Search{% endblock title %}
+{% block head %}
+    {{ super() }}
+{% endblock head%}
+{% block content %}
     <h2>Search Our Library</h2>
     <form action="{{url_for('search_result')}}" method="post">
         <label for="title">
@@ -13,5 +12,4 @@
             <button type="submit">Search</button>
         </label>
     </form>
-</body>
-</html>
+{% endblock content %}

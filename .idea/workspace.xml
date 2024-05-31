@@ -4,22 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="53274f55-f230-4a7a-aeb0-b80de348740b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/python/initialize_db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/all_page.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/searchResults.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/account.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/all_page.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/boardgameView.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/lfg.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/passport.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="53274f55-f230-4a7a-aeb0-b80de348740b" name="Changes" comment="Added things">
+      <change afterPath="$PROJECT_DIR$/static/js/addGame.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/boardgameAdd.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/boardgameView.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/boardgameView.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/search.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/search_result.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/search_result.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +28,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;JKrogsrud&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="757cde8a-1e54-46cb-8b53-e540e85d192d" />
+        <option name="url" value="https://github.com/JKrogsrud/boardroom_app.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -64,7 +70,7 @@
       <recent name="C:\Users\jkrog\coding_projects\boardroom_organizer_app\static" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test_db">
+  <component name="RunManager" selected="Python.initialize_db">
     <configuration name="initialize_db" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="boardroom_organizer_app" />
       <option name="ENV_FILES" value="" />
@@ -111,8 +117,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test_db" />
         <item itemvalue="Python.initialize_db" />
+        <item itemvalue="Python.test_db" />
       </list>
     </recent_temporary>
   </component>
@@ -132,6 +138,30 @@
       <option name="presentableId" value="Default" />
       <updated>1711046319291</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added things">
+      <option name="closed" value="true" />
+      <created>1714935404515</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714935404515</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added things" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added things" />
   </component>
 </project>

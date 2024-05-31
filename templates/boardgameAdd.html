@@ -2,10 +2,10 @@
 {% block title %}Search results{% endblock title %}
 {% block head %}
     {{ super() }}
+    <script src="{{url_for('static', filename='js/addGame.js') }}" defer></script>
 {% endblock head%}
 {% block content %}
-    <!--Pass the correct information to this, should be a dict-->
     {% if gameId%}
-        <div>{{gameId}}</div>
+        <div class="id_ref" id="{{gameId}}">Adding game with id: {{gameId}}</div>
     {% endif %}
 {% endblock content %}

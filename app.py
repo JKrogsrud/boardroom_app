@@ -8,6 +8,7 @@ import xmltodict
 import sqlite3
 from markupsafe import escape
 from tools import format_description
+from tools import search_and_format
 
 """Some global parameters:"""
 # MIN_NUM_VOTES is for measuring whether user polls are worthwhile reporting
@@ -45,7 +46,6 @@ def search_result():
 
 def search_bgg(game_title):
     # create the URL to search
-    # TODO: format the game_title string appropriately
     # tag the formatted search term onto the bgg search api
     url = 'https://boardgamegeek.com/xmlapi/search?search=' + str(game_title)
     # send request to bgg API
@@ -78,11 +78,19 @@ def boardgameAdd(gameId):
     # and if not, add it to the database
 
     # First load the database
+    print("Checking if game is already in database..")
+
+    print("Connecting to database..")
     con = sqlite3.connect("python/boardroom.db")
     cur = con.cursor()
+    print("Querying boardgames...")
 
     sql_select_search_boardgames = f"""SELECT * FROM boardgame WHERE id={str(gameId)};"""
-    if len(cur.execute(sql_select_search_boardgames).fetchall()) != 1:
+    print("result:")
+    sql_result = cur.execute(sql_select_search_boardgames).fetchall()
+    print(sql_result)
+
+    if len(sql_result) != 1:
         # In this case the game is not part of the database yet so we can add it
         # The boardgame table columns for reference:
         ## id, name, year_published, min_players, max_players, rec_players
@@ -150,31 +158,37 @@ def boardgameAdd(gameId):
         expansion_to = []
         is_expanded_by = []
 
-        # check if it returned a list
-        if type(game_info['boardgameexpansion']) == list:
-            # This is the case that we have multiple results
-            # We check every entry for a key called '@inbound'
-            for expansion in game_info['boardgameexpansion']:
+        # first we need to check if the key boardgameexpansion exists or not
+        if 'boardgameexpansion' in game_info:
+            # check if it returned a list
+            if type(game_info['boardgameexpansion']) == list:
+                # This is the case that we have multiple results
+                # We check every entry for a key called '@inbound'
+                for expansion in game_info['boardgameexpansion']:
+                    try:
+                        if bool(expansion['@inbound']):
+                            expansion_to.append(expansion['@objectid'])
+                    except:
+                        # assuming there is no key called '@inbound' we would get an exception
+                        # so instead we add the game to is_expanded_by
+                        is_expanded_by.append(expansion['@objectid'])
+            else:
+                # This case we didn't have a list so we don't need to loop
                 try:
-                    if bool(expansion['@inbound']):
-                        expansion_to.append(expansion['@objectid'])
+                    if bool(game_info['boardgameexpansion']['@inbound']):
+                        expansion_to.append(game_info['boardgameexpansion']['@objectid'])
                 except:
-                    # assuming there is no key called '@inbound' we would get an exception
-                    # so instead we add the game to is_expanded_by
-                    is_expanded_by.append(expansion['@objectid'])
-        else:
-            # This case we didn't have a list so we don't need to loop
-            try:
-                if bool(game_info['boardgameexpansion']['@inbound']):
-                    expansion_to.append(game_info['boardgameexpansion']['@objectid'])
-            except:
-                is_expanded_by.append(game_info['boardgameexpansion']['@objectid'])
+                    is_expanded_by.append(game_info['boardgameexpansion']['@objectid'])
 
-        # We will save this info for later
-        if len(expansion_to) > 0:
-            is_expansion = 1
+            # We will save this info for later
+            if len(expansion_to) > 0:
+                is_expansion = 1
+            else:
+                is_expansion = 0
+        # no entry for this means, the game is neither an expansion or is it expanded
         else:
             is_expansion = 0
+
 
         # now we get the 'weight'
         weight = game_info['statistics']['ratings']['averageweight']
@@ -206,20 +220,27 @@ def boardgameAdd(gameId):
                 sql_check = f"""SELECT * FROM boardgame WHERE id={base_id};"""
                 if len(cur.execute(sql_check).fetchall()) > 0:
                     # game exists so we can add it to the expansion list
-                    sql_add_expansion = f"""
-                                            INSERT INTO expansion (base_id, expansion_id)
-                                            VALUES (
-                                                    {base_id},
-                                                    {gameId});"""
-                    cur.execute(sql_add_expansion)
+                    try:
+                        sql_add_expansion = f"""
+                                                INSERT INTO expansion (base_id, expansion_id)
+                                                VALUES (
+                                                        {base_id},
+                                                        {gameId});"""
+                        cur.execute(sql_add_expansion)
+                    except:
+                        # It's possible we already added this in case we'd get a UNIQUE constraint integrity error
+                        # this is fine and we can move on
+                        pass
 
         # It's possible while going through stock that we might add an expansion before we add the base title
         # in this case when we add the expansion first nothing will be added to the db in this table
 
         for expansion_id in is_expanded_by:
             sql_check = f"""SELECT * FROM boardgame WHERE id={expansion_id};"""
-            if len(cur.execute(sql_check).fetchall()) == 0:
+            sql_result = cur.execute(sql_check).fetchall()
+            if len(sql_result) == 0:
                 # In this case we can now add a new entry to the expansion table
+                print(sql_result)
                 sql_add_expansion = f"""
                                         INSERT INTO expansion (base_id, expansion_id)
                                         VALUES (
@@ -228,7 +249,8 @@ def boardgameAdd(gameId):
                 cur.execute(sql_add_expansion)
 
         # Finally we can go through the game mechanics and add them to the mechanics table
-        # try except loop in case game has no listed mechanics
+        # try except in case game has no listed mechanics
+        # TODO: this isn't working right
         try:
             if type(game_info['boardgamemechanic']) != list:
                 mechanic_list = [game_info['boardgamemechanic']]
@@ -243,17 +265,24 @@ def boardgameAdd(gameId):
                                                 {mechanic['#text']};"""
                 cur.execute(sql_add_mechanic)
         except:
-            pass
+            print("Tried to insert an existing pair..moving on")
+    else:
+        print(f"Boardgame with id {gameId} already in database...")
 
     # Commit and Close
+    print("Commiting...")
     con.commit()
+    print("Closing connection...")
     con.close()
     # game is now added so we redirect to game view
-    return redirect(f"/library/view/<{gameId}>", code=301)
+    print("Rendering Template: boardgameAdd.html")
+    return render_template('boardgameAdd.html', gameId=gameId)
 
 
 @app.route("/library/view/<gameId>", methods=["GET", "POST"])
 def game_view(gameId):
     ## gameId will have the <> brackets as a string rn
+    gameFormat = search_and_format(gameId)
+    print("rendering template: boardgameView.html")
     return render_template('boardgameView.html', gameId=gameId)
 

@@ -9,12 +9,18 @@ def format_description(desc: str) -> str:
 
 def search_and_format(id: int) -> dict:
     # establish a connection with the database
-    con = sqlite3.connect("boardroom.db")
+    print("Connecting to database...")
+    con = sqlite3.connect("python/boardroom.db")
     cur = con.cursor()
 
+    print("id to search:")
+    print(id)
     # Pull information from boardgame table first
-    bg_select = f"""SELECT * FROM boardgame WHERE id={id};"""
-    search_result = cur.execute(bg_select).fetchone()
+    bg_select = f"""SELECT * FROM boardgame WHERE id={int(id)};"""
+    search_result = cur.execute(bg_select).fetchall()
+
+    print("Query Result:")
+    print(search_result)
 
     # as we are searching for an id and that is a primary key
     # the result should return just a single result
@@ -31,12 +37,21 @@ def search_and_format(id: int) -> dict:
     result_dict['max_players'] = int(max_players)
     result_dict['rec_players'] = int(rec_players)
     result_dict['min_age'] = int(min_age)
-    result_dict['description'] = str(result_dict)
+    result_dict['description'] = str(description)
     result_dict['image'] = str(image)
     result_dict['is_expansion'] = int(is_expansion)
     result_dict['weight'] = float(weight)
 
-    # next we accumulate a list of tags associated with the boardgame
+    # next we check the mechanics in the game by querying the MECHANIC table
+    mechanic_select = f"""SELECT * FROM mechanic WHERE game_id={id}"""
+    search_result = cur.execute(mechanic_select).fetchall()
+
+    print("Mechanics:")
+    print(search_result)
+
+    print("clearer dict:")
+    print(result_dict)
+    return result_dict
 
 
 
